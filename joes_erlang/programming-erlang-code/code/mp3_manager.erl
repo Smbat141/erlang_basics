@@ -3,7 +3,8 @@
 -compile(export_all).
 
 start1() ->
-    Files = lib_files_find:files("/home/joe/music_keep", "*.mp3", true),
+%%    Files = lib_files_find:files("/home/joe/music_keep", "*.mp3", true),
+    Files = ["Mi_Qani_Hogi.mp3"],
     V = map(fun handle/1, Files),
     lib_misc:dump("mp3data", V).
 

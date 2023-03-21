@@ -1,18 +1,18 @@
 .SUFFIXES: .erl .beam .yrl
 
 .erl.beam:
-	erlc -W $<
+	docker run -it -w /home -v $(shell pwd):/home erlang bash -c "erlc -W $<"
 
-MODS = example1 example1_lid unit_test
+MODS = example example_lid unit_test
 
-all: ${MODS:%=%.beam} example1 example1_drv.so
-	@erl -noshell -s unit_test start
+all: ${MODS:%=%.beam} example example_drv.so
+	docker run -it -w /home -v $(shell pwd):/home erlang bash -c "erl -noshell -s unit_test start"
 
-example1: example1.c erl_comm.c example1_driver.c
-	gcc -o example1 example1.c erl_comm.c example1_driver.c
+example: example.c erl_comm.c example_driver.c
+	gcc -o example example.c erl_comm.c example_driver.c
 
-example1_drv.so: example1_lid.c example1.c
-	gcc -I /usr/local/lib/erlang/usr/include -o example1_drv.so -fPIC -bundle -flat_namespace -undefined suppress example1.c example1_lid.c
+example_drv.so: example_lid.c example.c
+	gcc -I /usr/local/lib/erlang/usr/include -o example_drv.so -fPIC -bundle -flat_namespace -undefined suppress example.c example_lid.c
 
 clean:
-	rm example1 example1_drv.so *.beam
+	rm example example_drv.so *.beam

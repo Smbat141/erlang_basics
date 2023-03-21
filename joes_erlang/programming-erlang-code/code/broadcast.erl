@@ -6,7 +6,7 @@
 %% http://docs.sun.com/db?q=sockets&p=/doc/802-5886/6i9k5sgso&a=view
 
 %% socket FAQ
-                                                       
+
 %% Messages sent by datagram sockets can be broadcast to reach all 
 %% of the hosts on an attached network. The network must support broadcast; 
 %% the system provides no simulation of broadcast in software. 
@@ -28,7 +28,7 @@
 %%              sin.sin_port = htons(MYPORT);
 %%              bind(s, (struct sockaddr *) &sin, sizeof sin);
 %%
-%%   The datagram can be broadcast on only one network by sending 
+%% The datagram can be broadcast on only one network by sending
 %% to the network's broadcast address. A datagram can also be broadcast 
 %% on all attached networks by sending to the special address 
 %% INADDR_BROADCAST, defined in <netinet/in.h>.
@@ -38,25 +38,25 @@
 -compile(export_all).
 
 send(IoList) ->
-    case inet:ifget("eth0", [broadaddr]) of
-	{ok, [{broadaddr, Ip}]} ->
-	    {ok, S} =  gen_udp:open(5010, [{broadcast, true}]),
-	    gen_udp:send(S, Ip, 6000, IoList),
-	    gen_udp:close(S);
-	_ ->
-	    io:format("Bad interface name, or\n"
-		      "broadcasting not supported\n")
-    end.
+  case inet:ifget("eth0", [broadaddr]) of
+    {ok, [{broadaddr, Ip}]} ->
+      {ok, S} = gen_udp:open(5010, [{broadcast, true}]),
+      gen_udp:send(S, Ip, 6000, IoList),
+      gen_udp:close(S);
+    _ ->
+      io:format("Bad interface name, or\n"
+      "broadcasting not supported\n")
+  end.
 
 listen() ->
-    {ok, _} = gen_udp:open(6000),
-    loop().
+  {ok, _} = gen_udp:open(6000),
+  loop().
 
 loop() ->
-    receive
-	Any ->
-	    io:format("received:~p~n", [Any]),
-	    loop()
-    end.
+  receive
+    Any ->
+      io:format("received:~p~n", [Any]),
+      loop()
+  end.
 
 

@@ -1,6 +1,6 @@
 -module(example).
 -export([start/0, stop/0]).
--export([twice/1, sum/2]).
+-export([twice/1, sum/2, cpu_type/0]).
 
 start() ->
   register(example1,
@@ -48,3 +48,9 @@ encode({sum, X, Y}) -> [1, X, Y];
 encode({twice, X}) -> [2, X].
 
 decode([Int]) -> Int.
+
+
+cpu_type() ->
+  {match, [_, {Position, Length}]} = re:run(os:cmd("lscpu"), "Model name: (.*?)\nStepping"),
+  RawMatch = string:substr(os:cmd("lscpu"), Position, Length),
+  string:strip(RawMatch).
