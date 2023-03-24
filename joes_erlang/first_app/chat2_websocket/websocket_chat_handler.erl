@@ -15,7 +15,7 @@ init(Req, State) ->
 
 websocket_init(State) ->
   io:format("webscoket init State ~p~n", [State]),
-  Chat = spawn(chat1, start, [self()]),
+  Chat = spawn(chat2, start, [self()]),
   {ok, [{chat, Chat} | State]}.
 
 websocket_handle(Data, State) ->

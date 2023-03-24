@@ -15,7 +15,7 @@ function onClose(evt) {
 }  
   
 function onMessage(evt) {
-    console.log("onMessage", evt)
+//    console.log("onMessage", evt)
     var json = JSON.parse(evt.data);
     do_cmds(json);
 //    fill_div(json[0].)
@@ -47,16 +47,16 @@ function onOpen(evt) {
 
 // START:do 
 function do_cmds(objs){
-    console.log('do_cmds', objs);
+    console.log(objs);
     for(var i = 0; i < objs.length; i++){
-	var o = objs[i];
-	// as a safety measure we only evaluate js that is loaded
-	if(eval("typeof("+o.cmd+")") == "function"){
-	    eval(o.cmd + "(o)");
-	} else {
-	    console.log('bad_cmd', o);
-	    alert("bad_command:"+o.cmd);
-	};
+        var o = objs[i];
+        // as a safety measure we only evaluate js that is loaded
+        if(eval("typeof("+o.cmd+")") == "function"){
+            eval(o.cmd + "(o)");
+        } else {
+            console.log('bad_cmd', o);
+            alert("bad_command:"+o.cmd);
+        };
     };
 }
 // END:do

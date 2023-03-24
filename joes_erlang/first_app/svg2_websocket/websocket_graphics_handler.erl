@@ -1,4 +1,4 @@
--module(websocket_chat_handler).
+-module(websocket_graphics_handler).
 
 -export([init/2]).
 -export([websocket_init/1]).
@@ -15,20 +15,26 @@ init(Req, State) ->
 
 websocket_init(State) ->
   io:format("webscoket init State ~p~n", [State]),
-  Chat = spawn(chat1, start, [self()]),
-  {ok, [{chat, Chat} | State]}.
+  Canvas = spawn(svg_pad4, start, [self()]),
+  {ok, [{canvas, Canvas} | State]}.
 
 websocket_handle(Data, State) ->
   io:format("webscoket handle Info ~p~n: State ~p~n", [Data, State]),
-  {chat, Chat} = lists:keyfind(chat, 1, State),
+  {canvas, Canvas} = lists:keyfind(canvas, 1, State),
   {text, Action} = Data,
-  Chat ! {self(), {struct, jiffy:decode(Action)}},
+  Canvas ! {self(), {struct, jiffy:decode(Action)}},
   {ok, State}.
 
 websocket_info(Info, State) ->
   io:format("webscoket info Info ~p~n: State ~p~n", [Info, State]),
-  {reply, {text, jiffy:encode(Info)}, State}.
+  {send, Action} = Info,
+  [{Cmd}] = jiffy:decode(Action),
+%%  [[{Cmd}]] = [{<<"cmd">>,<<"SVG.init1">>},{<<"id">>,<<"svg">>},{<<"parent">>,<<"here">>},{<<"width">>,800},{<<"ht">>,400},{<<"color">>,<<"#ddebdd">>}]
+%%  {reply, {text, jiffy:encode(maps:from_list(Cmd))}, State}.
+  {reply, {text, Action}, State}.
 
 terminate(_Reason, Req, _State) ->
   io:format("websocket connection terminated~n~p~n", [maps:get(peer, Req)]),
   ok.
+
+

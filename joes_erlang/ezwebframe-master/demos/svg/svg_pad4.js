@@ -22,7 +22,7 @@ SVG.canvas = null;
 
 
 SVG.init1 = function(o){
-    // console.log('***** INIT ***** ', [SVG,o.indiv]);
+    console.log('***** INIT ***** ', [SVG,o.indiv]);
     var canvas = SVG.add_canvas(o);
 }
     

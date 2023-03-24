@@ -1,4 +1,4 @@
--module(websocket_chat_handler).
+-module(websocket_graphics_handler).
 
 -export([init/2]).
 -export([websocket_init/1]).
@@ -15,14 +15,14 @@ init(Req, State) ->
 
 websocket_init(State) ->
   io:format("webscoket init State ~p~n", [State]),
-  Chat = spawn(chat1, start, [self()]),
-  {ok, [{shell, Chat} | State]}.
+  Canvas = spawn(svg1, start, [self()]),
+  {ok, [{canvas, Canvas} | State]}.
 
 websocket_handle(Data, State) ->
   io:format("webscoket handle Info ~p~n: State ~p~n", [Data, State]),
-  {shell, Chat} = lists:keyfind(shell, 1, State),
+  {canvas, Canvas} = lists:keyfind(canvas, 1, State),
   {text, Action} = Data,
-  Chat ! {self(), {struct, jiffy:decode(Action)}},
+  Canvas ! {self(), {struct, jiffy:decode(Action)}},
   {ok, State}.
 
 websocket_info(Info, State) ->
