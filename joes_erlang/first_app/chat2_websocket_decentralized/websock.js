@@ -78,6 +78,7 @@ function send_json(x){
     send(JSON.stringify(x));
 }
 
+
 // We want the inputs to send a message when we hit CR in the input
 
 function make_live_inputs(){
@@ -112,4 +113,3 @@ function append_div(o){
 function fill_div(o){
     $('#'+o.id).html(o.txt);
 }
-

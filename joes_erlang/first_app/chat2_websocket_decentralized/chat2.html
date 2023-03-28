@@ -1,0 +1,100 @@
+<script type="text/javascript" src="jquery-3.6.3.min.js"></script>
+<script type="text/javascript" src="websock.js"></script>
+<link rel="stylesheet" href="chat2.css" type="text/css">
+<body>
+<h2>Chat</h2>
+<div id="idle">
+    <input id="nick_input" placeholder="Name"/>
+    <br/>
+    <br/>
+    <input id="group_input" placeholder="Group Name"/>
+    <button id="join">Join</button>
+    <br/>
+</div>
+<div id="errors">
+
+</div>
+<div id="running">
+    <table>
+        <tr>
+            <td>
+                <div id="scroll"></div>
+            </td>
+            <td>
+                <div id="users"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input id="tell" class="live_input"/><br/>
+                <input id="file" placeholder="Choose MP3" type="file"/>
+                <button id="send_mp3">Send MP3</button>
+                <button class="live_button" id="leave">Leave</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script>
+$(document).ready(run);
+
+function run(){
+  $("#running").hide();
+
+  $("#join").click(function(){
+      var nickname = $("#nick_input").val();
+      var group_name = $("#group_input").val();
+
+      $("#nick_input").val("");
+      $("#group_input").val("");
+
+      send_json({'join':nickname, 'group_name': group_name});
+  })
+
+   $("#send_mp3").click(function(){
+    var file = document.querySelector("#file").files[0];
+
+    const blob = new Blob([file], { type: 'audio/mpeg' });
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function() {
+        const base64data = reader.result.split(',')[1];
+
+        // Send the encoded MP3 data to the server
+        send_json({'share_mp3': base64data});
+    }
+  })
+}
+
+function append_mp3(o){
+    console.log("appending mp3", o);
+    const base64data = o.txt;
+    const binaryString = window.atob(base64data);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const arrayBuffer = bytes.buffer;
+
+    // Create an HTML audio element and set its source to the MP3 data
+    const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio();
+    audio.src = url;
+    audio.controls = true;
+
+    $("#" + o.id).append(audio);
+}
+
+
+function hide_div(o){
+    $("#" + o.id).hide();
+}
+  
+function show_div(o){
+    $("#" + o.id).show();
+}
+
+
+connect_to_erlang("localhost", 1456, "chat2")
+</script>

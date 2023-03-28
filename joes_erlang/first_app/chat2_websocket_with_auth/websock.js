@@ -112,4 +112,3 @@ function append_div(o){
 function fill_div(o){
     $('#'+o.id).html(o.txt);
 }
-
