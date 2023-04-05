@@ -1,0 +1,43 @@
+File generated from /home/exercises.erl by COVER 2023-04-03 at 13:17:18
+
+****************************************************************************
+
+        |  %%-module(exercises).
+        |  %%-export([get_all_exported_modules/0]).
+        |  %%
+        |  %%
+        |  %%
+        |  %%save_exported_modules_ets() ->
+        |  %%  TableId = ets:new(exported_modules, [set]),
+        |  %%  lists:foreach(fun({Module, Arity}) -> ets:insert(TableId, {Module, Arity}) end, get_all_exported_modules()).
+        |  %%
+        |  %%%%fetch_ets() ->
+        |  %%%%  ets:tab2list(TableId).
+        |  %%%%
+        |  %%%%
+        |  %%%%save_exported_modules_dets() ->
+        |  %%%%  5.
+        |  %%
+        |  %%get_all_exported_modules() ->
+        |  %%  SysLibs = lists:map(fun({ModuleName, _, _}) -> ModuleName end, application:which_applications()),
+        |  %%  lists:map(fun(ModuleName) -> ModuleName:module_info(exports) end, SysLibs).
+        |  
+        |  
+        |  
+        |  -module(exercises).
+        |  -export([test/0]).
+        |  
+        |  test() ->
+     1..|    Factorial = fun Fun(N) ->
+     6..|      if N == 0 ->
+     1..|        1;
+        |        800 ->
+     0..|          800;
+        |        true ->
+     5..|          N * Fun(N - 1)
+        |  
+        |      end
+        |                end,
+        |  
+     1..|    Result = Factorial(5),
+     1..|    io:format("Factorial of 5 is ~w~n", [Result]).

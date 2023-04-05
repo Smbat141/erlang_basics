@@ -8,6 +8,7 @@ start() ->
 test_ets(Mode) ->
     TableId = ets:new(test, [Mode]),
     ets:insert(TableId, {a,1}),
+    ets:insert(TableId, {8,1}),
     ets:insert(TableId, {b,2}),
     ets:insert(TableId, {a,1}),
     ets:insert(TableId, {a,3}),
