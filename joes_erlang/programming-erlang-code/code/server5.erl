@@ -4,12 +4,12 @@
 start() -> spawn(fun() -> wait() end).
 
 wait() ->
-    receive
-	{become, F} -> F()
-    end.
+  receive
+    {become, F} -> F()
+  end.
 
 rpc(Pid, Q) ->
-    Pid ! {self(), Q},
-    receive
-	{Pid, Reply} -> Reply
-    end.
+  Pid ! {self(), Q},
+  receive
+    {Pid, Reply} -> Reply
+  end.
